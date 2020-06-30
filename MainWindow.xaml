@@ -7,55 +7,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="900">
-    <Grid>
-        <materialDesign:Card
-            Background="#03a9f4"
-            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            Padding="0"
-            Height="130"
-            Width="200">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                    <RowDefinition
-                        Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox
-                        Grid.Row="1"
-                        materialDesign:HintAssist.Hint="Currency">
-                        <ComboBoxItem>
-                            USD
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            CHF
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            EUR
-                        </ComboBoxItem>
-                    </ComboBox>
-                    <TextBox Text="Balance" Margin="20,0,0,0"></TextBox>
-                    <Button
-                        HorizontalAlignment="Right"
-                         Margin="20,0,0,0"
-                        Style="{StaticResource MaterialDesignToolForegroundButton}"
-                        Width="30"
-                        Click="Button_Click"
-                        Padding="2 0 2 0"
-                        materialDesign:RippleAssist.IsCentered="True">
-                        <materialDesign:PackIcon
-                              Kind="CurrencyBrl" />
-                    </Button>
-                </StackPanel>
-
-                <Separator
-                    Grid.Row="1"
-                    Style="{StaticResource MaterialDesignLightSeparator}" />
-
-            </Grid>
-        </materialDesign:Card>
+    <Grid Background="#efebe9">
+        <local:ExchangeCard>
+            
+        </local:ExchangeCard>
     </Grid>
 </Window>

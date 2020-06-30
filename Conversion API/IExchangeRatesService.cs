@@ -2,7 +2,7 @@
 
 namespace CurrencyConversion
 {
-    public interface IExchangeRateService
+    public interface IExchangeRatesService
     {
         Task<decimal> Exchange(CurrenciesEnum fromCurrency, CurrenciesEnum toCurrency);
     }

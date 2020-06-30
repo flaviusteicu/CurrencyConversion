@@ -1,7 +1,9 @@
 ﻿<Application x:Class="WPF_CurrencyConversion.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:WPF_CurrencyConversion"
+             xmlns:enm="clr-namespace:CurrencyConversion"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
@@ -10,7 +12,14 @@
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+        <ObjectDataProvider x:Key="currencyEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enm:CurrenciesEnum"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+            
         </ResourceDictionary>
-        
+
     </Application.Resources>
 </Application>

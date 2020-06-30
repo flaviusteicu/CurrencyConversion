@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CurrencyConversion
 {
-    public class ExchangeRatesService : IExchangeRateService
+    public class ExchangeRatesService : IExchangeRatesService
     {
 
         private readonly HttpClient httpClient;
