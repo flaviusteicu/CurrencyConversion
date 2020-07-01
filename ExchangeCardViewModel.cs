@@ -1,11 +1,7 @@
-﻿using Prism.Commands;
-using System;
-using System.Collections.Generic;
+﻿using CurrencyConversion.Models;
+using Prism.Commands;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CurrencyConversion
@@ -14,7 +10,7 @@ namespace CurrencyConversion
     {
         private readonly IExchangeRatesService exchangeRateService;
 
-        private decimal rate;
+        private decimal calculatedRate;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -22,6 +18,16 @@ namespace CurrencyConversion
         {
             // It could be injected
             exchangeRateService = new ExchangeRatesService();
+        }
+
+        public ExchangeCardViewModel(ExchangeCardDetails exchangeCardDetails)
+        {
+            exchangeRateService = new ExchangeRatesService();
+
+            ExchangeFromCurrency = exchangeCardDetails.ExchangeFrom;
+            ExchangeToCurrency = exchangeCardDetails.ExhangeTo;
+            ExchangedAmmount = exchangeCardDetails.ToAmmount;
+            AmmountToExchange = exchangeCardDetails.FromAmmount;
         }
 
 
@@ -32,30 +38,31 @@ namespace CurrencyConversion
             set
             {
                 exchangeFromCurrency = value;
-                RefreshDisplayRate();
+                RefreshRate();
                 OnPropertyChanged();
             }
         }
 
-        private CurrenciesEnum exchangeToCurrency;
+        private CurrenciesEnum exchangeToCurrency = CurrenciesEnum.ARS;
         public CurrenciesEnum ExchangeToCurrency
         {
             get => exchangeToCurrency;
             set
             {
                 exchangeToCurrency = value;
-                RefreshDisplayRate();
+                RefreshRate();
+
                 OnPropertyChanged();
             }
         }
 
-        private string displayRate;
-        public string DisplayRate
+        private string rate;
+        public string Rate
         {
-            get => displayRate;
+            get => rate;
             set
             {
-                displayRate = value;
+                rate = value;
                 IsRateVisible = true;
                 OnPropertyChanged();
             }
@@ -98,34 +105,60 @@ namespace CurrencyConversion
         {
             get
             {
-               return new DelegateCommand<object>(Exchange, CanExchange); 
+                return new DelegateCommand<object>(Exchange, CanExchange);
             }
         }
 
         private void Exchange(object context)
         {
-            if(rate != 0)
-            {
-                ExchangedAmmount = AmmountToExchange * rate;
-            }
-            else
-            {
-                RefreshDisplayRate();
-                ExchangedAmmount = AmmountToExchange * rate;
-            }
-            
+            RefreshRate();
+            ExchangedAmmount = AmmountToExchange * calculatedRate;
         }
 
         private bool CanExchange(object context)
-        {          
+        {
             return true;
         }
 
-        public async void RefreshDisplayRate()
+        public ICommand SwitchCommand
         {
-            rate = await exchangeRateService.Exchange(ExchangeFromCurrency, ExchangeToCurrency);
+            get
+            {
+                return new DelegateCommand<object>(Switch, CanSwitch);
+            }
+        }
 
-            DisplayRate = $"1 {ExchangeFromCurrency} = {rate} {ExchangeToCurrency}";
+        private void Switch(object context)
+        {
+            AmmountToExchange = 0;
+            ExchangedAmmount = 0;
+
+            var newExchangeTo = ExchangeFromCurrency;
+
+            ExchangeFromCurrency = ExchangeToCurrency;
+            ExchangeToCurrency = newExchangeTo;
+        }
+
+        private bool CanSwitch(object context)
+        {
+            return true;
+        }
+
+        public async void OnFromAmmountTextChanged()
+        {
+            calculatedRate = await exchangeRateService.Exchange(ExchangeFromCurrency, ExchangeToCurrency);
+
+            ExchangedAmmount = calculatedRate * AmmountToExchange;
+        }
+
+
+        public async void RefreshRate()
+        {
+            calculatedRate = await exchangeRateService.Exchange(ExchangeFromCurrency, ExchangeToCurrency);
+
+            ExchangedAmmount = calculatedRate * AmmountToExchange;
+
+            Rate = $"1 {ExchangeFromCurrency} = {calculatedRate} {ExchangeToCurrency}";
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

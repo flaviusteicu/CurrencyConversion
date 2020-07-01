@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CurrencyConversion
+namespace CurrencyConversion.Models
 {
     public class ConversionRate
     {

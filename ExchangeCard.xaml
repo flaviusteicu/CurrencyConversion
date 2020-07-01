@@ -12,14 +12,14 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </UserControl.Resources>
-    
-    <Grid>
+
+    <Border>
         <materialDesign:Card
-             Background="#fafafa"
+             materialDesign:ShadowAssist.ShadowDepth="Depth3"
+             BorderThickness="0"
              Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
-             Padding="0"
              Height="250"
-             Width="600">
+             Width="450">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition
@@ -35,7 +35,7 @@
                         Width="70"
                         HorizontalContentAlignment="Center"
                         HorizontalAlignment="Left"
-                        Margin="56 16 16 4"
+                        Margin="56,45,0,25"
                         ItemsSource="{Binding Source={StaticResource currencyEnum}}"
                         SelectedItem="{Binding ExchangeFromCurrency}"
                         materialDesign:HintAssist.Hint="Select currency">
@@ -45,14 +45,16 @@
                         HorizontalAlignment="Right"
                         MinWidth="90"
                         Width="auto"
-                        MaxWidth="250"
+                        MaxWidth="200"
+                        PreviewTextInput="NumberValidationTextBox"
                         Height="50"
                         VerticalContentAlignment="Center"
                         FontSize="20"
-                        Margin="0,20,100,30"
-                        Text="{Binding AmmountToExchange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextChanged="AmmountToExchangeTextChanged"
+                        Text="{Binding AmmountToExchange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                         materialDesign:HintAssist.Hint="Ammount"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        Margin="0,25,80,25"/>
                 </Grid>
                 
                 
@@ -72,7 +74,7 @@
                                 VerticalAlignment="Center"
                                 Height="24"
                                 Width="24" />
-                            <TextBlock Text="{Binding DisplayRate, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <TextBlock Text="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         </StackPanel>
                     </materialDesign:Chip>
 
@@ -80,9 +82,9 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
                         Margin="0,0,50,0"
-                        Command="{Binding ExchangeCommand}"
+                        Command="{Binding SwitchCommand}"
                         Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-                        ToolTip="Do shit">
+                        ToolTip="Switch currencies">
                         <materialDesign:PackIcon
                         Kind="SwapVertical"
                         Height="24"
@@ -95,23 +97,26 @@
                     Width="70"
                     HorizontalAlignment="Left"
                     HorizontalContentAlignment="Center"
-                    Margin="56 16 16 4"
+                    Margin="56,40,0,30"
                     ItemsSource="{Binding Source={StaticResource currencyEnum}}"
                     SelectedItem="{Binding ExchangeToCurrency}"
                     materialDesign:HintAssist.Hint="Select currency">
                     </ComboBox>
 
-                    <TextBlock 
+                    <TextBox
                         HorizontalAlignment="Right"
                         MinWidth="90"
-                        MaxWidth="250"
                         Width="auto"
+                        MaxWidth="200"
                         Height="50"
-                        Text="{Binding ExchangedAmmount, UpdateSourceTrigger=PropertyChanged}"
-                        Margin="0,20,100,30"                        
-                        FontSize="20"/>
+                        IsReadOnly="True"
+                        materialDesign:HintAssist.Hint="Ammount"
+                        VerticalContentAlignment="Center"
+                        FontSize="20"
+                        Text="{Binding ExchangedAmmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                        Margin="0,20,80,30"/>
                 </Grid>
             </Grid>
         </materialDesign:Card>
-    </Grid>
+    </Border>
 </UserControl>

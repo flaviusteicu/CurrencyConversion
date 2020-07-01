@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace CurrencyConversion
+namespace CurrencyConversion.Models
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum CurrenciesEnum

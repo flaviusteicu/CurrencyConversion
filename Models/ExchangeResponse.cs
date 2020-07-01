@@ -1,4 +1,4 @@
-﻿namespace CurrencyConversion
+﻿namespace CurrencyConversion.Models
 {
     public class ExchangeResponse
     {

@@ -8,8 +8,68 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="900">
     <Grid Background="#efebe9">
-        <local:ExchangeCard>
-            
-        </local:ExchangeCard>
+        <materialDesign:DialogHost
+             Style="{StaticResource MaterialDesignEmbeddedDialogHost}"
+             DialogMargin="8">
+            <Border
+                BorderThickness="1"
+                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                ClipToBounds="True"
+                HorizontalAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ListBox
+                        x:Name="CurrencyCardsBox"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                        ScrollViewer.CanContentScroll="False"
+                        HorizontalAlignment="Center">
+                        <ListBox.InputBindings>
+                            <KeyBinding Command="{Binding SomeCommand}" Key="Delete"></KeyBinding>
+                        </ListBox.InputBindings>
+                    </ListBox>
+                    <materialDesign:ColorZone
+                        Mode="PrimaryMid"
+                        Grid.Row="1"
+                        Effect="{DynamicResource MaterialDesignShadowDepth5}">
+                        <TextBlock
+                            Margin="16">
+                            Currency Conversion
+                        </TextBlock>
+                    </materialDesign:ColorZone>
+                    <Button
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        Click="OnAddButtonClick"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Grid.Row="0"
+                        Margin="0 0 28 -20">
+                        <materialDesign:PackIcon
+                            Kind="Plus"
+                            Height="22"
+                            Width="22" />
+                    </Button>
+
+                    <Button
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        Click="OnSaveButtonClick"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Grid.Row="0"
+                        Margin="0 0 90 -20">
+                        <materialDesign:PackIcon
+                            Kind="ContentSaveAll"
+                            Height="22"
+                            Width="22" />
+                    </Button>
+
+                </Grid>
+            </Border>
+        </materialDesign:DialogHost>
     </Grid>
 </Window>

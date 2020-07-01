@@ -104,10 +104,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Conversion API\ConversionRate.cs" />
-    <Compile Include="Conversion API\CurrenciesEnum.cs" />
+    <Compile Include="Models\ConversionRate.cs" />
+    <Compile Include="Models\CurrenciesEnum.cs" />
     <Compile Include="Conversion API\ExchangeRatesService.cs" />
-    <Compile Include="Conversion API\ExchangeResponse.cs" />
+    <Compile Include="Models\ExchangeResponse.cs" />
     <Compile Include="Conversion API\IExchangeRatesService.cs" />
     <Compile Include="ExchangeCard.xaml.cs">
       <DependentUpon>ExchangeCard.xaml</DependentUpon>
@@ -119,6 +119,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ExchangeCardDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
