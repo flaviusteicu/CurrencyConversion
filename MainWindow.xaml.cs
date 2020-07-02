@@ -3,7 +3,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace CurrencyConversion
 {
@@ -49,7 +52,7 @@ namespace CurrencyConversion
             }
         }
 
-        private void OnSaveButtonClick(object sender, RoutedEventArgs e)
+        private async void OnSaveButtonClick(object sender, RoutedEventArgs e)
         {
             var exchangeCardsToSave = new List<ExchangeCardDetails>();
 
@@ -60,13 +63,18 @@ namespace CurrencyConversion
                 var exchangeCardDetails = new ExchangeCardDetails()
                 {
                     ExchangeFrom = exchangeCardVM.ExchangeFromCurrency,
-                    ExhangeTo = exchangeCardVM.ExchangeToCurrency,
+                    ExchangeTo = exchangeCardVM.ExchangeToCurrency,
                     FromAmmount = exchangeCardVM.AmmountToExchange,
                     ToAmmount = exchangeCardVM.ExchangedAmmount
                 };
                 exchangeCardsToSave.Add(exchangeCardDetails);
             }
+            SuccesfulSaveTextBlock.Visibility = Visibility.Hidden;
+            SaveProgressBar.Visibility = Visibility.Visible;
+            await Task.Delay(3000);
             SaveCardsToDisk(path, exchangeCardsToSave);
+            SaveProgressBar.Visibility = Visibility.Hidden;
+            SuccesfulSaveTextBlock.Visibility = Visibility.Visible;
         }
 
         private void SaveCardsToDisk(string path, List<ExchangeCardDetails> exchangeCardDetails)
@@ -78,5 +86,13 @@ namespace CurrencyConversion
             }
         }
 
+        private void CurrencyCardsBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Delete)
+            {
+                CurrencyCardsBox.Items.Remove((sender as ListBox).SelectedItem);
+                SaveButton.Focus();
+            }
+        }
     }
 }

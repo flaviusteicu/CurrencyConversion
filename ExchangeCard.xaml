@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CurrencyConversion"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="800">
+             d:DesignHeight="250" Width="600">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        <local:StringToNullableDecimalConverter x:Key="nullDecimalConv"/>
     </UserControl.Resources>
 
     <Border>
@@ -19,7 +21,7 @@
              BorderThickness="0"
              Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
              Height="250"
-             Width="450">
+             Width="500">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition
@@ -40,9 +42,10 @@
                         SelectedItem="{Binding ExchangeFromCurrency}"
                         materialDesign:HintAssist.Hint="Select currency">
                     </ComboBox>
-                    
+
                     <TextBox
                         HorizontalAlignment="Right"
+                        x:Name="ExchangeFromTextBox"
                         MinWidth="90"
                         Width="auto"
                         MaxWidth="200"
@@ -55,6 +58,7 @@
                         materialDesign:HintAssist.Hint="Ammount"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                         Margin="0,25,80,25"/>
+                    
                 </Grid>
                 
                 
@@ -103,18 +107,28 @@
                     materialDesign:HintAssist.Hint="Select currency">
                     </ComboBox>
 
+                    <Button
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Width="100"
+                        Name="ExchangeButton"
+                        Command="{Binding ExchangeCommand}"
+                        Margin="160,48,200,20">
+                        Exchange
+                    </Button>
+
                     <TextBox
                         HorizontalAlignment="Right"
                         MinWidth="90"
                         Width="auto"
                         MaxWidth="200"
+                        materialDesign:HintAssist.Hint="{Binding ExchangedAmmountPreview, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                         Height="50"
                         IsReadOnly="True"
-                        materialDesign:HintAssist.Hint="Ammount"
                         VerticalContentAlignment="Center"
                         FontSize="20"
-                        Text="{Binding ExchangedAmmount, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
-                        Margin="0,20,80,30"/>
+                        Text="{Binding ExchangedAmmount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource nullDecimalConv}, StringFormat=N2}"
+                        Margin="0,19,80,31">
+                    </TextBox>
                 </Grid>
             </Grid>
         </materialDesign:Card>

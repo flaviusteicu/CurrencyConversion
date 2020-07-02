@@ -2,6 +2,7 @@
 
 namespace CurrencyConversion.Models
 {
+    // Wrapper over API
     public class ConversionRate
     {
         public decimal AED { get; set; }

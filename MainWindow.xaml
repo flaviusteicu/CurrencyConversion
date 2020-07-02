@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:CurrencyConversion"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="900">
+        Height="700" Width="650">
+
+    
     <Grid Background="#efebe9">
         <materialDesign:DialogHost
              Style="{StaticResource MaterialDesignEmbeddedDialogHost}"
@@ -28,25 +30,41 @@
                         x:Name="CurrencyCardsBox"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ScrollViewer.CanContentScroll="False"
+                        KeyDown="CurrencyCardsBox_KeyDown"
                         HorizontalAlignment="Center">
-                        <ListBox.InputBindings>
-                            <KeyBinding Command="{Binding SomeCommand}" Key="Delete"></KeyBinding>
-                        </ListBox.InputBindings>
                     </ListBox>
                     <materialDesign:ColorZone
                         Mode="PrimaryMid"
                         Grid.Row="1"
                         Effect="{DynamicResource MaterialDesignShadowDepth5}">
-                        <TextBlock
-                            Margin="16">
-                            Currency Conversion
-                        </TextBlock>
+                        <Grid>
+                            <TextBlock
+                                Margin="16"
+                                Width="110"
+                                HorizontalAlignment="Left">
+                                Currency Conversion
+                            </TextBlock>
+                            <TextBlock
+                                x:Name="SuccesfulSaveTextBlock"
+                                Margin="16,16,16,16"
+                                Width="110"
+                                Visibility="Hidden"
+                                HorizontalAlignment="Center">
+                                Successfuly saved!
+                            </TextBlock>
+                            <ProgressBar
+                                x:Name="SaveProgressBar"
+                                IsIndeterminate="True"
+                                Visibility="Hidden"
+                                Margin="0,44,2,0"/>
+                        </Grid>
                     </materialDesign:ColorZone>
                     <Button
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         Click="OnAddButtonClick"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
+                        ToolTip="Add exchange card"
                         Grid.Row="0"
                         Margin="0 0 28 -20">
                         <materialDesign:PackIcon
@@ -58,6 +76,8 @@
                     <Button
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         Click="OnSaveButtonClick"
+                        Name="SaveButton"
+                        ToolTip="Save cards"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
                         Grid.Row="0"

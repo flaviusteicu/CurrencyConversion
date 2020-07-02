@@ -6,11 +6,25 @@ using System.Windows.Input;
 
 namespace CurrencyConversion
 {
+
+    //TODO: Further development could include:
+    //
+    //              - a sort of watchdog with an auto-exchange functionality for when a certain currency reaches a desired exchange rate
+    //              - more currencies (ex crypto)
+    //              - having a balance (linking an account - this opens up a lot of opportunities)
+    //              - a login mechanism for security reasons
+    //              Banking operations such as:
+    //              - donations 
+    //              - bank transfer
+    //              - stock market investments
+
+
     public class ExchangeCardViewModel : INotifyPropertyChanged
     {
         private readonly IExchangeRatesService exchangeRateService;
 
-        private decimal calculatedRate;
+        private decimal? calculatedRate = null;
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -25,7 +39,7 @@ namespace CurrencyConversion
             exchangeRateService = new ExchangeRatesService();
 
             ExchangeFromCurrency = exchangeCardDetails.ExchangeFrom;
-            ExchangeToCurrency = exchangeCardDetails.ExhangeTo;
+            ExchangeToCurrency = exchangeCardDetails.ExchangeTo;
             ExchangedAmmount = exchangeCardDetails.ToAmmount;
             AmmountToExchange = exchangeCardDetails.FromAmmount;
         }
@@ -79,19 +93,20 @@ namespace CurrencyConversion
             }
         }
 
-        private decimal ammountToExchange;
-        public decimal AmmountToExchange
+        private decimal? ammountToExchange = null;
+        public decimal? AmmountToExchange
         {
             get => ammountToExchange;
             set
             {
+                OnFromAmmountTextChanged();
                 ammountToExchange = value;
                 OnPropertyChanged();
             }
         }
 
-        private decimal exchangedAmmount;
-        public decimal ExchangedAmmount
+        private decimal? exchangedAmmount = null;
+        public decimal? ExchangedAmmount
         {
             get => exchangedAmmount;
             set
@@ -100,6 +115,19 @@ namespace CurrencyConversion
                 OnPropertyChanged();
             }
         }
+
+        private decimal? exchangedAmmountPreview = null;
+        public decimal? ExchangedAmmountPreview
+        {
+            get => exchangedAmmountPreview;
+            set
+            {
+                exchangedAmmountPreview = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #region Exchange Command
 
         public ICommand ExchangeCommand
         {
@@ -120,6 +148,10 @@ namespace CurrencyConversion
             return true;
         }
 
+        #endregion
+
+
+        #region Switch Command
         public ICommand SwitchCommand
         {
             get
@@ -130,8 +162,8 @@ namespace CurrencyConversion
 
         private void Switch(object context)
         {
-            AmmountToExchange = 0;
-            ExchangedAmmount = 0;
+            AmmountToExchange = null;
+            ExchangedAmmount = null;
 
             var newExchangeTo = ExchangeFromCurrency;
 
@@ -144,22 +176,29 @@ namespace CurrencyConversion
             return true;
         }
 
+        #endregion
+
+
+        // Called when the user inputs a number in the exchange box
         public async void OnFromAmmountTextChanged()
         {
             calculatedRate = await exchangeRateService.Exchange(ExchangeFromCurrency, ExchangeToCurrency);
 
-            ExchangedAmmount = calculatedRate * AmmountToExchange;
+            Rate = $"1 {ExchangeFromCurrency} = {calculatedRate} {ExchangeToCurrency}";
+
+            ExchangedAmmountPreview = calculatedRate * AmmountToExchange;
         }
 
-
+        // Refreshes the exchange rate based on user currency input
         public async void RefreshRate()
         {
             calculatedRate = await exchangeRateService.Exchange(ExchangeFromCurrency, ExchangeToCurrency);
 
-            ExchangedAmmount = calculatedRate * AmmountToExchange;
+            ExchangedAmmountPreview = calculatedRate * AmmountToExchange;
 
             Rate = $"1 {ExchangeFromCurrency} = {calculatedRate} {ExchangeToCurrency}";
         }
+
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {

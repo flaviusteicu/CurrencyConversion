@@ -1,5 +1,6 @@
 ﻿namespace CurrencyConversion.Models
 {
+    // Wrapper over API
     public class ExchangeResponse
     {
         public string result { get; set; }
